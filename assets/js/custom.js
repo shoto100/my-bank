@@ -1,6 +1,9 @@
+const loginBtn = document.getElementById("login");
+const depositBtn = document.getElementById("addDeposit");
+const withdrawBtn = document.getElementById("addWithdraw");
+
 //! login button event handler
 
-const loginBtn = document.getElementById("login");
 loginBtn.addEventListener("click", function() {
     const loginArea = document.getElementById("login-area");
     loginArea.style.display = "none";
@@ -11,25 +14,32 @@ loginBtn.addEventListener("click", function() {
 
 //! deposit button event handler
 
-const depositBtn = document.getElementById("addDeposit");
 depositBtn.addEventListener("click", function() {
     var depositNumber = getInputNumber("depositAmount");
 
-    updateSpanText("currentDeposit", depositNumber);
-    updateSpanText("currentBalance", depositNumber);
+    if (depositNumber > 0) {
+        updateSpanText("currentDeposit", depositNumber);
+        updateSpanText("currentBalance", depositNumber);
+    }
     
     document.getElementById("depositAmount").value = "";
 })
 
 //! withdraw button event handler
 
-const withdrawBtn = document.getElementById("addWithdraw");
 withdrawBtn.addEventListener("click", function() {
     const withdrawNumber = getInputNumber("withdrawAmount");
     
-    updateSpanText("currentWithdraw", withdrawNumber);
-    updateSpanText("currentBalance", -1 * withdrawNumber);
-
+    
+    const current = document.getElementById("currentBalance").innerText;
+    
+    if (current > 0)  {
+        updateSpanText("currentWithdraw", withdrawNumber);
+        updateSpanText("currentBalance", -1 * withdrawNumber);
+    }
+    else {
+        alert("Your current balance is zero. Please deposit some money");
+    }
     document.getElementById("withdrawAmount").value = "";
 })
 
@@ -45,5 +55,6 @@ function updateSpanText(id, addedNumber) {
     const current = document.getElementById(id).innerText;
     const currentNumber = parseFloat(current);
     const amount = addedNumber + currentNumber;
+    
     document.getElementById(id).innerText = amount;
 }
